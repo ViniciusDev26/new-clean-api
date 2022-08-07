@@ -1,7 +1,8 @@
+import { HttpRequest, HttpResponse } from '../contracts'
 import { MissingParamError } from '../errors/missing-param-error'
 
 export class SignUpController {
-  handle (httpRequest: any): any {
+  handle (httpRequest: HttpRequest): HttpResponse {
     const requiredFields = ['name', 'email']
     for (const field of requiredFields) {
       if (httpRequest.body[field]) continue
@@ -13,7 +14,8 @@ export class SignUpController {
     }
 
     return {
-      statusCode: 200
+      statusCode: 200,
+      body: null
     }
   }
 }
