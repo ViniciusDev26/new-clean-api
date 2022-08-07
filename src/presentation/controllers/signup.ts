@@ -12,8 +12,8 @@ export class SignUpController {
     }
 
     return {
-      statusCode: 200,
-      body: null
+      statusCode: 201,
+      body: 'created with success'
     }
   }
 }
