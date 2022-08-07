@@ -2,8 +2,13 @@ import { MissingParamError } from '../errors/MissingParamError'
 import { SignUpController } from './SignUpController'
 
 describe('SignUp Controller', () => {
+  let sut: SignUpController
+
+  beforeEach(() => {
+    sut = new SignUpController()
+  })
+
   it('should return 400 if no name is provided', () => {
-    const sut = new SignUpController()
     const httpRequest = {
       body: {
         name: '',
@@ -19,7 +24,6 @@ describe('SignUp Controller', () => {
   })
 
   it('should return 400 if no email is provided', () => {
-    const sut = new SignUpController()
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -35,7 +39,6 @@ describe('SignUp Controller', () => {
   })
 
   it('should return 400 if no password is provided', () => {
-    const sut = new SignUpController()
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -51,7 +54,6 @@ describe('SignUp Controller', () => {
   })
 
   it('should return 201 if valid data is provided', () => {
-    const sut = new SignUpController()
     const httpRequest = {
       body: {
         name: 'any_name',
