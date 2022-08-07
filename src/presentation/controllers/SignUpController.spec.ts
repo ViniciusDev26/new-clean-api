@@ -1,11 +1,18 @@
-import { MissingParamError } from '../errors/MissingParamError'
+import { MissingParamError, InvalidParamError } from '../errors'
 import { SignUpController } from './SignUpController'
 
+import { MockProxy, mock } from 'jest-mock-extended'
+import { EmailValidator } from '../contracts'
+
 describe('SignUp Controller', () => {
+  let emailValidator: MockProxy<EmailValidator>
   let sut: SignUpController
 
   beforeEach(() => {
-    sut = new SignUpController()
+    emailValidator = mock()
+    emailValidator.isValid.mockReturnValue(true)
+
+    sut = new SignUpController(emailValidator)
   })
 
   it('should return 400 if no name is provided', () => {
@@ -51,6 +58,24 @@ describe('SignUp Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
+  })
+
+  it('should return 400 an invalid email is provided', () => {
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'invalid_mail@mail.com',
+        password: 'any_password'
+      }
+    }
+    emailValidator.isValid.mockReturnValue(false)
+
+    const httpResponse = sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new InvalidParamError('email'))
+    expect(emailValidator.isValid).toHaveBeenCalledTimes(1)
+    expect(emailValidator.isValid).toHaveBeenCalledWith('invalid_mail@mail.com')
   })
 
   it('should return 201 if valid data is provided', () => {
