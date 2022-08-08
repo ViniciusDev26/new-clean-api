@@ -22,12 +22,17 @@ export class SignUpController implements Controller {
       const { name, email, password } = httpRequest.body
       if (!this.emailValidator.isValid(email)) return badRequest(new InvalidParamError('email'))
 
-      await this.addAccount.add({
+      const { id } = await this.addAccount.add({
         name,
         email,
         password
       })
-      return created('created with success')
+
+      return created({
+        id,
+        name,
+        email
+      })
     } catch (error) {
       return serverError()
     }
