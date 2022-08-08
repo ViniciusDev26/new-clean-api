@@ -159,15 +159,19 @@ describe('SignUp Controller', () => {
   it('should return 201 if valid data is provided', async () => {
     const httpRequest = {
       body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password'
+        name: 'validName',
+        email: 'validEmail@mail.com',
+        password: 'validPassword'
       }
     }
 
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(201)
-    expect(httpResponse.body).toBe('created with success')
+    expect(httpResponse.body).toEqual({
+      id: 'validId',
+      name: 'validName',
+      email: 'validEmail@mail.com'
+    })
   })
 })
