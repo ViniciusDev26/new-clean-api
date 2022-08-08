@@ -74,8 +74,21 @@ describe('SignUp Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
+  })
+
+  it('should call EmailValidator with correct email', () => {
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'valid_mail@mail.com',
+        password: 'any_password'
+      }
+    }
+
+    sut.handle(httpRequest)
+
     expect(emailValidator.isValid).toHaveBeenCalledTimes(1)
-    expect(emailValidator.isValid).toHaveBeenCalledWith('invalid_mail@mail.com')
+    expect(emailValidator.isValid).toHaveBeenCalledWith('valid_mail@mail.com')
   })
 
   it('should return 201 if valid data is provided', () => {
