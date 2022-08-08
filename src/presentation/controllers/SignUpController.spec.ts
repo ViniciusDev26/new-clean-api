@@ -2,8 +2,8 @@ import { MissingParamError, InvalidParamError, InternalServerError } from '../er
 import { SignUpController } from './SignUpController'
 
 import { MockProxy, mock } from 'jest-mock-extended'
-import { EmailValidator } from '../contracts'
 import { AddAccount } from '../../domain/features/AddAccount'
+import { EmailValidator } from '../contracts/EmailValidator'
 
 describe('SignUp Controller', () => {
   let emailValidator: MockProxy<EmailValidator>

@@ -1,5 +1,6 @@
 import { AddAccount } from '../../domain/features/AddAccount'
-import { HttpRequest, HttpResponse, Controller, EmailValidator } from '../contracts'
+import { HttpRequest, HttpResponse, Controller } from '../contracts'
+import { EmailValidator } from '../contracts/EmailValidator'
 import { InvalidParamError, MissingParamError } from '../errors'
 import { badRequest, created, serverError } from '../helpers'
 
