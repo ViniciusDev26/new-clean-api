@@ -1,4 +1,4 @@
-import { MissingParamError, InvalidParamError } from '../errors'
+import { MissingParamError, InvalidParamError, InternalServerError } from '../errors'
 import { SignUpController } from './SignUpController'
 
 import { MockProxy, mock } from 'jest-mock-extended'
@@ -68,7 +68,7 @@ describe('SignUp Controller', () => {
         password: 'any_password'
       }
     }
-    emailValidator.isValid.mockReturnValue(false)
+    emailValidator.isValid.mockReturnValueOnce(false)
 
     const httpResponse = sut.handle(httpRequest)
 
@@ -89,6 +89,24 @@ describe('SignUp Controller', () => {
 
     expect(emailValidator.isValid).toHaveBeenCalledTimes(1)
     expect(emailValidator.isValid).toHaveBeenCalledWith('valid_mail@mail.com')
+  })
+
+  it('should return 500 if email validator throws', () => {
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+    }
+    emailValidator.isValid.mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const httpResponse = sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new InternalServerError())
   })
 
   it('should return 201 if valid data is provided', () => {
