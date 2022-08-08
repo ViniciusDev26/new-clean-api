@@ -138,6 +138,24 @@ describe('SignUp Controller', () => {
     })
   })
 
+  it('should return 500 if AddAccount throws', async () => {
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+    }
+    addAccount.add.mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const promiseResponse = await sut.handle(httpRequest)
+
+    expect(promiseResponse.statusCode).toBe(500)
+    expect(promiseResponse.body).toEqual(new InternalServerError())
+  })
+
   it('should return 201 if valid data is provided', async () => {
     const httpRequest = {
       body: {
